@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="cae7893e-8eb2-490e-bfe9-0e6594055adf">
+	<property name="ireport.zoom" value="1.2100000000000024"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="287"/>
+	<subDataset name="DS_Empleado" uuid="d8a22e19-7a23-4e43-a105-679bfce1ed5d">
+		<queryString language="SQL">
+			<![CDATA[SELECT
+     SUM(total),
+     sales.`id_vendedor`,
+     sales.`nombre_vendedor`
+FROM
+     `sales` sales
+WHERE
+     CAST(register_date as date) LIKE '%$F{register_date}%'
+GROUP BY
+     total
+     DESC
+     LIMIT 1]]>
+		</queryString>
+		<field name="id_vendedor" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="nombre_vendedor" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="SUM(total)" class="java.lang.Double"/>
+		<group name="id_vendedor">
+			<groupExpression><![CDATA[$F{id_vendedor}]]></groupExpression>
+		</group>
+		<group name="nombre_vendedor">
+			<groupExpression><![CDATA[$F{nombre_vendedor}]]></groupExpression>
+		</group>
+		<group name="SUM(total)">
+			<groupExpression><![CDATA[$F{SUM(total)}]]></groupExpression>
+		</group>
+	</subDataset>
+	<parameter name="fecha" class="java.lang.String">
+		<defaultValueExpression><![CDATA[$F{register_date}]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT DISTINCT
+     ( SELECT IFNULL(SUM(total),0) FROM `sales` WHERE credito = 1 AND CAST(register_date as date) LIKE '%$P!{fecha}%' ) AS Credito,
+     ( SELECT IFNULL(SUM(total),0) FROM `sales` WHERE credito = 0 AND CAST(register_date as date) LIKE '%$P!{fecha}%' )AS Contado, CAST(register_date as date) as register_date, SUM(efectivo)as Efectivo, SUM(credit)as TarjetaCredito, SUM(tarjeta)as TarjetaDebito, SUM(cheques)as Cheque, SUM(vales) as Vale
+FROM
+     `sales` sales
+WHERE
+     CAST(register_date as date) LIKE '%$P!{fecha}%']]>
+	</queryString>
+	<field name="Credito" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Contado" class="java.lang.Double"/>
+	<field name="register_date" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Efectivo" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TarjetaCredito" class="java.lang.Double"/>
+	<field name="TarjetaDebito" class="java.lang.Double"/>
+	<field name="Cheque" class="java.lang.Double"/>
+	<field name="Vale" class="java.lang.Double"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="49" y="20" width="445" height="32" uuid="bfaeba9f-923d-4d37-a6e0-b0441bc57335"/>
+				<textElement>
+					<font size="22" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Corte de caja Reporte General de Ventas]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="225" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement x="114" y="55" width="100" height="20" uuid="9033e9b7-64a2-46df-8f21-8d60282ccb7f"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="14" y="55" width="100" height="20" uuid="727e0c13-a0df-4a3d-9b88-f70b6f5c78a2"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Fecha solicitud:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="14" y="19" width="52" height="20" uuid="8e5d419b-5e8e-412b-9691-76b8863c5f7c"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Periodo:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="78" y="19" width="100" height="20" uuid="e1bdce14-193e-4c84-b4b7-4f3d1079ba27"/>
+				<textFieldExpression><![CDATA[$F{register_date}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="0" y="141" width="555" height="23" uuid="7dc35765-a03e-4dd5-8294-147ea5446e3f"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="121" width="555" height="20" backcolor="#2980B9" uuid="6a8ddbd6-9af0-4c31-ac8c-32196284d92c"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="-1" y="121" width="271" height="20" forecolor="#FFFFFF" uuid="8974fe8b-dfbb-40ac-8dfc-d0736c1d44f8"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ventas de contado del día]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="271" y="121" width="284" height="20" forecolor="#FFFFFF" uuid="cd57c1a3-5db5-41ad-8c03-92e938bba388"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ventas a crédito del día]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="144" width="271" height="20" uuid="2abc0d46-37a1-4e07-b9dd-e82ba31eb947"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{Contado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="271" y="144" width="284" height="20" uuid="b4464a2c-48b6-4287-bbbc-141bd70df158"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{Credito}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="-1" y="203" width="555" height="20" backcolor="#2980B9" uuid="cd9a29b3-7fe1-4739-ae26-257cd37b9150"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="272" y="203" width="284" height="20" forecolor="#FFFFFF" uuid="5d3c8177-cf4f-4558-b068-506dffbc3409"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tarjetas de Débito]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="203" width="271" height="20" forecolor="#FFFFFF" uuid="d0217ea0-9805-435b-bd9e-2e0a2cd33f9e"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Efectivo]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="204" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="46" width="271" height="20" uuid="f709ef35-55af-4403-9910-4baf78716ff4"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{TarjetaCredito}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="0" y="23" width="555" height="20" backcolor="#2980B9" uuid="29cb548b-02e4-4e79-b58b-f37ad0d6106d"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="271" y="23" width="284" height="20" forecolor="#FFFFFF" uuid="f7e126db-2d5d-4ffe-a85e-381c541401c6"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cheques]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="271" y="46" width="284" height="20" uuid="21736dc4-3dc4-4d9a-aadd-87a96d60b22c"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{Cheque}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="23" width="271" height="20" forecolor="#FFFFFF" uuid="2e420149-aa1b-4e37-b399-81dbc3061327"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tarjetas de Crédito]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="66" width="555" height="1" uuid="ca1c307e-e1b4-41dc-b981-5ab51371590e"/>
+			</line>
+			<line>
+				<reportElement x="555" y="0" width="1" height="67" uuid="73d6dff9-23c2-4955-bfdc-9895d3df64d5"/>
+			</line>
+			<line>
+				<reportElement x="1" y="0" width="1" height="107" uuid="05420c8d-d3f3-4f61-9f92-e2adbc7bc3ec"/>
+			</line>
+			<rectangle>
+				<reportElement x="2" y="67" width="269" height="20" forecolor="#0099CC" backcolor="#2980B9" uuid="78e836c9-bf4f-4dff-81b1-3b8768319a3a"/>
+			</rectangle>
+			<textField>
+				<reportElement x="1" y="87" width="271" height="20" uuid="3a310f4f-7f34-4901-8758-d59292867699"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{Vale}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="90" y="66" width="100" height="20" forecolor="#FFFFFF" uuid="6f195f99-83b2-4b3a-8993-dc3bcce3d9ff"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vales]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="66" width="556" height="1" uuid="8a9f48db-9cec-4a13-807e-cd5b60961508"/>
+			</line>
+			<textField>
+				<reportElement x="272" y="0" width="284" height="20" uuid="8da62853-7b50-4902-90c8-88f021e0fec7"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{TarjetaDebito}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="0" width="270" height="20" uuid="cb6100fd-7149-4e14-89c3-9811cf273430"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{Efectivo}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="2" y="107" width="271" height="1" uuid="ffc50691-989d-405d-b24f-eca59def752e"/>
+			</line>
+			<line>
+				<reportElement x="272" y="67" width="1" height="40" uuid="b0c8d606-7689-4d26-b57b-7cc5caa9d9b7"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

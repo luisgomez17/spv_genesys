@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" whenNoDataType="BlankPage" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="32e2ace5-8738-4c0c-8e7c-37a3006dd9f6">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="68"/>
+	<parameter name="Inicio" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Fin" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT DISTINCT (SELECT SUM(total) FROM sales WHERE credito = 0 AND CAST(register_date AS DATE) BETWEEN $P{Inicio} AND $P{Fin}) AS CONTADO,
+(SELECT SUM(total) FROM sales WHERE credito = 1 AND CAST(register_date AS DATE) BETWEEN $P{Inicio} AND $P{Fin}) AS CREDITOS,
+(SELECT SUM(saldo) FROM notas WHERE tipo = 1 AND CAST(fecha AS DATE) BETWEEN $P{Inicio} AND $P{Fin}) AS NC,
+(SELECT SUM(saldo) FROM notas WHERE tipo = 2 AND CAST(fecha AS DATE) BETWEEN $P{Inicio} AND $P{Fin})AS Devoluciones,
+(SELECT SUM(subtotal) FROM sales WHERE credito = 1 AND CAST(register_date AS DATE) BETWEEN $P{Inicio} AND $P{Fin}) AS CR,
+(SELECT COUNT(id_sale) FROM sales WHERE CAST(register_date AS DATE) BETWEEN $P{Inicio} AND $P{Fin}) AS Ticket,
+(SELECT COUNT(id_nota) FROM notas WHERE CAST(fecha AS DATE) BETWEEN $P{Inicio} AND $P{Fin}) AS Note,
+(SELECT COUNT(id_transfer) FROM transfer WHERE CAST(registro AS DATE) BETWEEN $P{Inicio} AND $P{Fin}) AS Traspaso,
+(SELECT SUM(pd.price*pz.amount) FROM product_details as pd JOIN product_sizes as pz on pz.art = pd.art WHERE pz.amount>0) AS Inventario
+FROM SALES AS SL 
+WHERE CAST(SL.register_date AS DATE) BETWEEN $P{Inicio} AND $P{Fin}]]>
+	</queryString>
+	<field name="CONTADO" class="java.lang.Double"/>
+	<field name="CREDITOS" class="java.lang.Double"/>
+	<field name="NC" class="java.lang.Double"/>
+	<field name="Devoluciones" class="java.lang.Double"/>
+	<field name="CR" class="java.lang.Double"/>
+	<field name="Ticket" class="java.lang.Long"/>
+	<field name="Note" class="java.lang.Long"/>
+	<field name="Traspaso" class="java.lang.Long"/>
+	<field name="Inventario" class="java.lang.Double"/>
+	<field name="sumV" class="java.lang.Double"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="65" splitType="Stretch">
+			<staticText>
+				<reportElement x="141" y="0" width="291" height="32" uuid="4ae0588d-8050-498b-a261-d8b1124b6b44"/>
+				<textElement>
+					<font size="22" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reporte General de Ventas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="45" width="52" height="20" uuid="ef90424c-b390-46cf-8381-df069d294117"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Periodo:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="345" y="45" width="100" height="20" uuid="96774e59-e765-444a-b754-cf33b8f3d3ed"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Fecha solicitud:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement x="445" y="45" width="100" height="20" uuid="d39cdb84-3200-4bb8-884e-56c418341e24"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="65" y="45" width="100" height="20" uuid="d195c3e8-5e55-4c74-aa1e-336008d7fe66"/>
+				<textFieldExpression><![CDATA[$P{Inicio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="165" y="45" width="100" height="20" uuid="ce68a9fe-b0c1-4fd8-b2c5-0878f3e7a46b"/>
+				<textFieldExpression><![CDATA[$P{Fin}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="719" splitType="Stretch">
+			<staticText>
+				<reportElement x="13" y="159" width="119" height="20" uuid="73519d49-5697-4091-a11d-e764c12185d2"/>
+				<text><![CDATA[NOTAS DE CRÉDITO]]></text>
+			</staticText>
+			<rectangle radius="10">
+				<reportElement x="13" y="237" width="532" height="20" backcolor="#CCFFFF" uuid="bef30185-406c-48e6-a2f3-7f8ed9a67767">
+					<property name="net.sf.jasperreports.export.pdf.tag.h1" value="start"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="304" y="498" width="125" height="20" uuid="7249b33f-1b8b-414f-ac38-7e42ec857611"/>
+				<text><![CDATA[TOTAL:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="227" y="127" width="126" height="20" uuid="7e689fdd-4426-4727-aa70-887dcb59929f"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOTAS DE CRÉDITO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="179" width="119" height="20" uuid="8216ef72-7ebc-4212-9134-aeca7a0ac310"/>
+				<text><![CDATA[DEVOLUCIONES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="393" width="179" height="20" uuid="96ae0d1f-1df6-4903-8f64-61cb420a73a0"/>
+				<text><![CDATA[TOTAL:]]></text>
+			</staticText>
+			<rectangle radius="10">
+				<reportElement x="13" y="127" width="532" height="20" backcolor="#CCFFFF" uuid="90a85a8d-d8e5-41f8-b024-2f179908c0b7">
+					<property name="net.sf.jasperreports.export.pdf.tag.h1" value="start"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="13" y="478" width="179" height="20" uuid="845bc67c-8513-4997-940d-efdfff0e1653"/>
+				<text><![CDATA[UTILIDAD/CREDITO RECUPERADO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="458" width="179" height="20" uuid="3b1fe62a-65d1-42af-bb4e-7d4bf659cb55"/>
+				<text><![CDATA[UTILIDAD/VENTAS A CONTADO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="498" width="179" height="20" uuid="6ce56639-6532-4495-95a4-ef5b803e8cac"/>
+				<text><![CDATA[TOTAL:]]></text>
+			</staticText>
+			<rectangle radius="10">
+				<reportElement x="13" y="10" width="532" height="20" backcolor="#CCFFFF" uuid="4b0434fc-0524-4568-bfa0-4435adcc0843">
+					<property name="net.sf.jasperreports.export.pdf.tag.h1" value="start"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="227" y="427" width="139" height="20" uuid="7687934c-f9da-436e-8f18-aeb9571e7bbc"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[UTILIDADES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="69" width="119" height="20" uuid="c0aaaa8d-4f4c-4f41-b80b-b3337dfd2cf6"/>
+				<text><![CDATA[VENTAS A CREDITO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="89" width="119" height="20" uuid="f2167d23-2dcb-4446-b749-acd36ddff9ca"/>
+				<text><![CDATA[TOTAL:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="307" width="179" height="20" uuid="8aeecfce-3414-47b5-a16f-9759e5ee66c1"/>
+				<text><![CDATA[TOTAL:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="373" width="179" height="20" uuid="7bd07c08-a229-4990-8589-12735481184c"/>
+				<text><![CDATA[SALIDA-DEVOLUCIONES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="227" y="237" width="139" height="20" uuid="db83e348-cbfa-41d2-8ecd-177edd044723"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ENTRADAS / SALIDAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="267" width="179" height="20" uuid="d69fdb24-9f30-4df5-b161-79cb68be2936"/>
+				<text><![CDATA[ENTRADA-VENTAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="304" y="458" width="125" height="20" uuid="92560f72-f4a5-438d-b30b-e2e0d1d72437"/>
+				<text><![CDATA[UTILIDAD/VENTAS:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="353" width="179" height="20" uuid="aef93b13-b41c-4f59-866c-94e130e56753"/>
+				<text><![CDATA[SALIDA-NOTAS CRÉDITO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="304" y="327" width="75" height="20" uuid="f54752ee-d7ef-4a47-92bd-c799945364c0"/>
+				<text><![CDATA[DIFERENCIA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="199" width="119" height="20" uuid="79728c9a-e4f3-42b7-9284-46277555852b"/>
+				<text><![CDATA[TOTAL:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="241" y="10" width="100" height="20" uuid="a8c2df0d-a7e4-46cb-bb2e-b8d99c28484d"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VENTAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="287" width="179" height="20" uuid="3d616ea0-2ed9-49de-983a-5fcd1dd4c606"/>
+				<text><![CDATA[ENTRADA-CREDITO RECUPERADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="49" width="119" height="20" uuid="38b4de68-cef4-4277-901c-4cfc4d57e067"/>
+				<text><![CDATA[VENTAS A CONTADO:]]></text>
+			</staticText>
+			<rectangle radius="10">
+				<reportElement x="13" y="427" width="532" height="20" backcolor="#CCFFFF" uuid="5ad431bd-8ef1-473f-a083-375085dac991">
+					<property name="net.sf.jasperreports.export.pdf.tag.h1" value="start"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="227" y="427" width="139" height="20" uuid="3815c8fd-8a75-41ed-b50b-23953c970357"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[UTILIDADES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="237" y="127" width="139" height="20" uuid="9cf8c7aa-98e6-40f4-977c-0315cbfdae21"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOTAS DE CRÉDITO]]></text>
+			</staticText>
+			<rectangle radius="10">
+				<reportElement x="13" y="536" width="532" height="20" backcolor="#CCFFFF" uuid="5f67e44f-3187-4a53-a58a-fb485a47dece">
+					<property name="net.sf.jasperreports.export.pdf.tag.h1" value="start"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="227" y="536" width="139" height="20" uuid="253d2b43-1691-4204-96a5-334ffa74f557"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DOCUMENTOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="608" width="179" height="20" uuid="6379f2c8-e4be-426b-80b4-1f15083d0925"/>
+				<text><![CDATA[TRASPASOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="588" width="179" height="20" uuid="ab825f75-65d6-4a33-b638-67e82cdc515f"/>
+				<text><![CDATA[NOTAS DE CREDITO GENERADAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="568" width="179" height="20" uuid="31cc4fb2-a20a-4dba-8e73-6f5b4c8fc281"/>
+				<text><![CDATA[TICKETS GENERADOS:]]></text>
+			</staticText>
+			<rectangle radius="10">
+				<reportElement x="13" y="641" width="532" height="20" backcolor="#CCFFFF" uuid="8fcf4949-c1c8-4a19-9e4d-b8647f71ca2c">
+					<property name="net.sf.jasperreports.export.pdf.tag.h1" value="start"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="221" y="641" width="155" height="20" uuid="b30ed488-6459-48ad-9f8d-ca885a94d682"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[INVENTARIO Y CREDITOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="675" width="125" height="20" uuid="c0870efd-f6e7-42b2-8f6f-b239c302229a"/>
+				<text><![CDATA[TOTAL DE INVENTARIO:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="141" y="49" width="100" height="20" uuid="7d3bfda3-23c0-49a3-86a9-1870f1e20b3a"/>
+				<textFieldExpression><![CDATA[$F{CONTADO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="141" y="69" width="100" height="20" uuid="6f6d0188-b548-4f26-ae35-12a3bdc3b06b"/>
+				<textFieldExpression><![CDATA[$F{CREDITOS}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

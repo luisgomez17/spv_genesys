@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6f5fe840-e396-4fa8-9c1f-d2fbe0687c74">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="sale_year" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[Select YEAR(date_sale_test) AS year, MONTHNAME(date_sale_test) AS month, SUM(total_sale_test) AS total
+FROM sales_test
+WHERE YEAR(date_sale_test) = $P!{sale_year}
+GROUP BY MONTHNAME(date_sale_test)
+ORDER BY Month(date_sale_test)]]>
+	</queryString>
+	<field name="year" class="java.lang.Integer"/>
+	<field name="month" class="java.lang.String"/>
+	<field name="total" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="97" splitType="Stretch">
+			<staticText>
+				<reportElement x="221" y="18" width="147" height="20" uuid="4179ff43-164b-49ce-ba0d-1a68a35baec3"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reporte de Ventas]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement x="423" y="66" width="100" height="20" uuid="21e5415c-ab25-4300-b0dd-4307bf25d4e9"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="66" width="30" height="20" uuid="a48aaf6f-64e7-46b3-8581-d3158f849b25"/>
+				<text><![CDATA[Año:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="30" y="66" width="100" height="20" uuid="2d837f75-46f7-4cc2-a061-41444ebbbbe2"/>
+				<textFieldExpression><![CDATA[$P{sale_year}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="21" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="20" backcolor="#2980B9" uuid="5feca8a6-93a1-486c-97c9-115580cbfc17"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="11" y="0" width="100" height="20" forecolor="#FFFFFF" uuid="8f40f2be-6dad-4761-ad10-b34c8369c938"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Mes]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="158" y="1" width="100" height="20" forecolor="#FFFFFF" uuid="00f3c7a2-d1bf-49ad-baf9-9e1362678585"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="-2" width="555" height="23" uuid="a525b7ff-d884-4e89-b988-1585f4d6149e"/>
+			</rectangle>
+			<textField>
+				<reportElement x="11" y="1" width="100" height="20" uuid="f693e044-9a91-4059-ba57-b2e30a1847b8"/>
+				<textFieldExpression><![CDATA[$F{month}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="158" y="1" width="100" height="20" uuid="66be0b4c-fff0-42e0-b62a-79271624f1d5"/>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="35" splitType="Stretch">
+			<textField>
+				<reportElement x="221" y="15" width="87" height="20" uuid="aa042475-d2ad-42a9-948e-7d37dca70879"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="308" y="15" width="40" height="20" uuid="992b89cb-e2ea-43ee-a854-3384a0ec0cc0"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="414" splitType="Stretch">
+			<pieChart>
+				<chart>
+					<reportElement x="30" y="46" width="493" height="248" uuid="735d81a3-b24f-4e72-8829-7b15b4cf9335"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<keyExpression><![CDATA[$F{month}]]></keyExpression>
+					<valueExpression><![CDATA[$F{total}]]></valueExpression>
+					<labelExpression><![CDATA[$F{month}+" $"+$F{total}]]></labelExpression>
+				</pieDataset>
+				<piePlot>
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+		</band>
+	</summary>
+</jasperReport>
