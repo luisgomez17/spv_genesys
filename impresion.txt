@@ -1,65 +1,65 @@
-                                        
-          GENESYS MODA INFANTIL         
-                                        
-               molm6505111i1            
-                                        
-    Plaza de las Americas local A 13    
-                                        
-       Lazaro Cardenas, Michoacan       
-                                        
-               60950                    
-                                        
-         genesys.mi@hotmail.com         
-----------------------------------------
- No. TICKET:1345                        
-                                        
- Fecha:19/10/2018                       
-                                        
- Hora:19:56:44                          
-----------------------------------------
-                                        
- CANT  PCIO U. %DESC  IMPORTE           
-                                        
-----------------------------------------
-Pantalón largo de niño en sarga tipo chi
-no 5 140.0 1 140.0                      
-                                        
-----------------------------------------
-                                        
-                                        
-                                        
-               TOTAL: 140.0             
-                                        
-                                        
-<<<<<<<<<<<<<FORMAS DE PAGO>>>>>>>>>>>>>
-                                        
-                                        
-               EFECTIVO: 140.0          
-                                        
-               TARJETA: 0.0             
-                                        
-               CREDITO: 0.0             
-                                        
-               CHEQUES: 0.0             
-                                        
-               VALES: 0.0               
-                                        
-                                        
-               PAGO: 140.0              
-                                        
-               CAMBIO: 0.0              
-                                        
-                                        
-                  CAJA                  
-                                        
-     Caja 1                             
-                                        
-                CLIENTE:                
-                                        
-          Jose Ramirez                  
-                                        
-                 CAJERO                 
-                                        
-          Luis Gomez                    
-                                        
-                                        
+                                
+     GENESYS MODA INFANTIL      
+                                
+          molm6505111i1         
+                                
+ Plaza las Americas local A 13  
+                                
+   Lazaro Cardenas, Michoacan   
+                                
+            60950               
+                                
+    genesys.mi@hotmail.com      
+--------------------------------
+ No. TICKET:0                   
+                                
+ Fecha:08/11/2018               
+ Hora:10:07:32                  
+--------------------------------
+  Nombre            Cant Importe
+--------------------------------
+Blusa Manga Larga v  2   998.0  
+arios diseños                   
+Blusa Tazas Manga L  2   2318.0 
+arga Y Falda Plisad             
+--------------------------------
+                                
+          TOTAL: 3316.0         
+                                
+<<<<<<<<<FORMAS DE PAGO>>>>>>>>>
+                                
+                                
+          EFECTIVO: 3316.0      
+          TARJETA: 0.0          
+          CREDITO: 0.0          
+          CHEQUES: 0.0          
+          VALES: 0.0            
+                                
+          PAGO: 4000.0          
+                                
+                                
+          CAMBIO: 684.0         
+                                
+ CLIENTE: Publico general       
+                                
+ CAJERO Luis Gomez              
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                

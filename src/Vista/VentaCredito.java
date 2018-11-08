@@ -382,7 +382,7 @@ Abonos a;
             
             String valor = JOptionPane.showInputDialog(null, "Registre el abono que desee ingresar");
             
-            if (valor.isEmpty() || valor == null || JOptionPane.CANCEL_OPTION == 2) {
+            if (valor.isEmpty() || valor == null) {
                 JOptionPane.showMessageDialog(null, "Ingrese una cantidad válida");
             } else {
                 abono = Double.parseDouble(valor) + (double) tbSale.getValueAt(seleccion, 4);

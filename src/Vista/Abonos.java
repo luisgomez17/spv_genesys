@@ -1,20 +1,35 @@
-
 package Vista;
 
 import Controlador.Coordinador;
 import Modelo.ApartadoVo;
+import Modelo.Ticket;
 import Modelo.VentaVo;
+import br.com.adilson.util.Extenso;
+import br.com.adilson.util.PrinterMatrix;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.print.Doc;
+import javax.print.DocFlavor;
+import javax.print.DocPrintJob;
+import javax.print.PrintService;
+import javax.print.PrintServiceLookup;
+import javax.print.SimpleDoc;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
 import javax.swing.JOptionPane;
 
-
 public class Abonos extends javax.swing.JInternalFrame {
+
     public VentaVo aux = new VentaVo();
     public VentaVo abn = new VentaVo();
     public int estado;
     double total = 0, pagar = 0;
     public ApartadoVo ap = new ApartadoVo();
     private Coordinador miCoordinador;
-     
+
     public void setCoordinador(Coordinador miCoordinador) {
         this.miCoordinador = miCoordinador;
         lblPagar.setText(Double.toString(abn.getTotal()));
@@ -23,7 +38,7 @@ public class Abonos extends javax.swing.JInternalFrame {
     public Abonos() {
         initComponents();
     }
-    
+
     public double sumarPagos() {
         abn.setEfectivo(Double.parseDouble(txtPago.getText()));
         abn.setCheques(Double.parseDouble(txtCheque.getText()));
@@ -35,7 +50,6 @@ public class Abonos extends javax.swing.JInternalFrame {
         pagar = (double) Math.round((pagar * 100d) / 100d);
         return pagar;
     }
-   
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -276,48 +290,152 @@ public class Abonos extends javax.swing.JInternalFrame {
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         double monto = sumarPagos();
-        if (monto > 0){
-        
-            switch(estado){
-            case 1:
-                if(abn.getTotal() <= monto){
-             double cambio = monto - abn.getTotal();
-             cambio = (double) Math.round((cambio * 100d) / 100d);
-             JOptionPane.showMessageDialog(null, "Gracias por su abono, su cambio es de" + " " + Double.toString(cambio) + "");
-            miCoordinador.insertAbono(abn);
-             miCoordinador.pagarDeuda(aux);
-            dispose();
-            }        
-            else{
-        JOptionPane.showMessageDialog(null, "Ingrese una cantidad valida", "Credito", JOptionPane.INFORMATION_MESSAGE);    
+        if (monto > 0) {
+
+            switch (estado) {
+                case 1:
+                    if (abn.getTotal() <= monto) {
+                        double cambio = monto - abn.getTotal();
+                        cambio = (double) Math.round((cambio * 100d) / 100d);
+                        JOptionPane.showMessageDialog(null, "Gracias por su abono, su cambio es de" + " " + Double.toString(cambio) + "");
+                        miCoordinador.insertAbono(abn);
+                        miCoordinador.pagarDeuda(aux);
+                        imprimirFactura();
+                        dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Ingrese una cantidad valida", "Credito", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                case 2:
+                    if (abn.getTotal() <= monto) {
+                        double cambio = monto - abn.getTotal();
+                        cambio = (double) Math.round((cambio * 100d) / 100d);
+                        JOptionPane.showMessageDialog(null, "Gracias por su abono, su cambio es de" + " " + Double.toString(cambio) + "");
+                        miCoordinador.insertAbonoApart(abn);
+                        miCoordinador.updateAbon(ap);
+                        imprimirFactura();
+                        dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Ingrese una cantidad valida", "Credito", JOptionPane.INFORMATION_MESSAGE);
+                    }
             }
-            case 2:
-               if(abn.getTotal() <= monto){
-             double cambio = monto - abn.getTotal();
-             cambio = (double) Math.round((cambio * 100d) / 100d);
-             JOptionPane.showMessageDialog(null, "Gracias por su abono, su cambio es de" + " " + Double.toString(cambio) + "");
-            miCoordinador.insertAbonoApart(abn);  
-            miCoordinador.updateAbon(ap); 
-            dispose();
-            }        
-            else{
-        JOptionPane.showMessageDialog(null, "Ingrese una cantidad valida", "Credito", JOptionPane.INFORMATION_MESSAGE);    
-            }  
-            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No ha ingresado un método de pago", "Credito", JOptionPane.INFORMATION_MESSAGE);
         }
-        else{
-        JOptionPane.showMessageDialog(null, "No ha ingresado un método de pago", "Credito", JOptionPane.INFORMATION_MESSAGE);
-        }
-        
+
     }//GEN-LAST:event_btnAceptarActionPerformed
 
-    
+    void imprimirFactura() {
+        Date date = new Date();
+        DateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        PrinterMatrix printer = new PrinterMatrix();
+
+        Extenso e = new Extenso();
+
+        e.setNumber(101.85);
+
+        printer.setOutSize(40, 32);
+
+        printer.printTextWrap(1, 2, 5, 32, "GENESYS MODA INFANTIL");
+        //printer.printTextWrap(linI, linE, colI, colE, null);
+        printer.printTextWrap(3, 4, 10, 32, "molm6505111i1 ");
+        printer.printTextWrap(5, 6, 1, 32, "Plaza las Americas local A 13");
+        printer.printTextWrap(7, 8, 3, 32, "Lazaro Cardenas, Michoacan");
+        printer.printTextWrap(9, 10, 12, 32, "60950");
+        printer.printTextWrap(11, 12, 4, 32, "genesys.mi@hotmail.com");
+        printer.printCharAtCol(13, 1, 32, "-");
+        printer.printTextWrap(13, 14, 1, 32, "No. TICKET:" );
+        printer.printTextWrap(15, 16, 1, 32, "Fecha:" + dateFormat.format(date));
+        printer.printTextWrap(16, 17, 1, 32, "Hora:" + hourFormat.format(date));
+        printer.printCharAtCol(18, 1, 32, "-");
+        printer.printTextWrap(18, 19, 2, 32, "RECIBO DE ABONO A CREDITO");
+        printer.printCharAtCol(20, 1, 32, "-");
+        /* int cont = 0, cont2 = 20;
+        for (int i = 0; i < bolsa.size(); i++) {
+
+            printer.printTextWrap(cont2 + i, cont2 + i + 1, 0, 18, bolsa.get(i).getArt_name() + " ");
+            printer.printTextWrap(cont2 + i, cont2 + i + 1, 21, 23, bolsa.get(i).getQuantity() + " ");
+            printer.printTextWrap(cont2 + i, cont2 + i + 1, 25, 32,"" + bolsa.get(i).getImporte());
+            cont2 = cont2 + i + 1;
+            cont = i + 2;
+        }*/
+        // printer.printCharAtCol(22, 1, 32, "-");
+        printer.printTextWrap(21, 22, 1, 32, "CLIENTE: ");
+        printer.printTextWrap(22, 24, 1, 32, "" );
+        printer.printTextWrap(24, 25, 1, 32, "CAJERO ");
+        printer.printTextWrap(25, 26, 1, 32, "" );
+        printer.printTextWrap(27, 28, 0, 32, "<<<<<<<<FORMAS DE ABONO>>>>>>>>");
+        printer.printTextWrap(29, 30, 10, 32, "EFECTIVO: " );
+        printer.printTextWrap(30, 31, 10, 32, "TARJETA: " );
+        printer.printTextWrap(31, 32, 10, 32, "CREDITO: " );
+        printer.printTextWrap(32, 33, 10, 32, "CHEQUES: " );
+        printer.printTextWrap(33, 34, 10, 32, "VALES: " );
+        printer.printTextWrap(35, 35, 10, 32, "ADEUDO: " );
+        printer.printTextWrap(36, 37, 10, 32, "ABONO: " );
+        printer.printTextWrap(37, 38, 10, 32, "NUEVO ADEUDO: ");
+        /* printer.printTextWrap(39 + cont, 51, 18, 32, "CAJA");
+         printer.printTextWrap(41 + cont, 53, 15, 32, "Caja 1");
+        printer.printTextWrap(39, 55, 1, 32, "CLIENTE: " + ticket.getCliente());
+         printer.printTextWrap(56 + cont, 57, 10, 32, ticket.getCliente());
+        printer.printTextWrap(41, 59, 1, 32, "CAJERO " + ticket.getVendedor());
+        printer.printTextWrap(60 + cont, 62, 10, 32, ticket.getVendedor());
+
+
+ /*
+        if(filas > 15){
+        printer.printCharAtCol(filas + 1, 1, 80, "=");
+        printer.printTextWrap(filas + 1, filas + 2, 1, 80, "TOTAL A PAGAR " + txtVentaTotal.getText());
+        printer.printCharAtCol(filas + 2, 1, 80, "=");
+        printer.printTextWrap(filas + 2, filas + 3, 1, 80, "Esta boleta no tiene valor fiscal, solo para uso interno.: + Descripciones........");
+        }else{
+        printer.printCharAtCol(25, 1, 80, "=");
+        printer.printTextWrap(26, 26, 1, 80, "TOTAL A PAGAR " + txtVentaTotal.getText());
+        printer.printCharAtCol(27, 1, 80, "=");
+        printer.printTextWrap(27, 28, 1, 80, "Esta boleta no tiene valor fiscal, solo para uso interno.: + Descripciones........");
+
+        }*/
+        printer.toFile("impresionabono.txt");
+
+        FileInputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream("impresion.txt");
+
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        }
+        if (inputStream == null) {
+            return;
+        }
+
+        DocFlavor docFormat = DocFlavor.INPUT_STREAM.AUTOSENSE;
+        Doc document = new SimpleDoc(inputStream, docFormat, null);
+
+        PrintRequestAttributeSet attributeSet = new HashPrintRequestAttributeSet();
+
+        PrintService defaultPrintService = PrintServiceLookup.lookupDefaultPrintService();
+
+        if (defaultPrintService != null) {
+            DocPrintJob printJob = defaultPrintService.createPrintJob();
+            try {
+                printJob.print(document, attributeSet);
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            System.err.println("No existen impresoras instaladas");
+        }
+
+        //inputStream.close();
+    }
+
+
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void txtPagoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPagoKeyTyped
-char c = evt.getKeyChar();
+        char c = evt.getKeyChar();
         int ascii = (int) c;
         if (ascii < 48 || ascii > 57) {
             getToolkit().beep();
@@ -326,21 +444,21 @@ char c = evt.getKeyChar();
     }//GEN-LAST:event_txtPagoKeyTyped
 
     private void txtTermKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTermKeyTyped
-char c = evt.getKeyChar();
+        char c = evt.getKeyChar();
         int ascii = (int) c;
         if (ascii < 48 || ascii > 57) {
             getToolkit().beep();
             evt.consume();
         }
-        
-        if(txtTerm.getText().length() >= 4){
+
+        if (txtTerm.getText().length() >= 4) {
             getToolkit().beep();
             evt.consume();
         }
     }//GEN-LAST:event_txtTermKeyTyped
 
     private void txtTarjetaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTarjetaKeyTyped
-char c = evt.getKeyChar();
+        char c = evt.getKeyChar();
         int ascii = (int) c;
         if (ascii < 48 || ascii > 57) {
             getToolkit().beep();
@@ -349,7 +467,7 @@ char c = evt.getKeyChar();
     }//GEN-LAST:event_txtTarjetaKeyTyped
 
     private void txtChequeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtChequeKeyTyped
-char c = evt.getKeyChar();
+        char c = evt.getKeyChar();
         int ascii = (int) c;
         if (ascii < 48 || ascii > 57) {
             getToolkit().beep();
@@ -358,7 +476,7 @@ char c = evt.getKeyChar();
     }//GEN-LAST:event_txtChequeKeyTyped
 
     private void txtCreditoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCreditoKeyTyped
-char c = evt.getKeyChar();
+        char c = evt.getKeyChar();
         int ascii = (int) c;
         if (ascii < 48 || ascii > 57) {
             getToolkit().beep();
@@ -367,7 +485,7 @@ char c = evt.getKeyChar();
     }//GEN-LAST:event_txtCreditoKeyTyped
 
     private void txtValeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtValeKeyTyped
-char c = evt.getKeyChar();
+        char c = evt.getKeyChar();
         int ascii = (int) c;
         if (ascii < 48 || ascii > 57) {
             getToolkit().beep();
@@ -375,7 +493,6 @@ char c = evt.getKeyChar();
         }
     }//GEN-LAST:event_txtValeKeyTyped
 
-   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;

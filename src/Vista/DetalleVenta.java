@@ -1,24 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Vista;
 
 import Controlador.Coordinador;
 import Modelo.ApartadoVo;
-import Modelo.BagDao;
 import Modelo.BagVo;
 import Modelo.ColorVo;
-import Modelo.CreditoVo;
 import Modelo.NotaVo;
 import Modelo.ProductoVo;
 import Modelo.TallaVo;
 import Modelo.VentaVo;
-import static Vista.Usuarios.tbUsers;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.beans.PropertyVetoException;
 
 import java.text.DateFormat;
@@ -26,24 +16,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.ListCellRenderer;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
-/**
- *
- * @author bryan
- */
 public class DetalleVenta extends javax.swing.JInternalFrame {
 
     DefaultComboBoxModel modeloTalla;
@@ -122,7 +100,6 @@ public class DetalleVenta extends javax.swing.JInternalFrame {
                 bag.get(i).getSize_name(), bag.get(i).getPrice(), bag.get(i).getQuantity(), bag.get(i).getImporte()
             });
         }
-        //Asignamos los datos del Modelo a la tabla
         tbVenta.setModel(modelo);
     }
 
@@ -865,8 +842,6 @@ public class DetalleVenta extends javax.swing.JInternalFrame {
             evt.consume();
 
         }
-
-        // &&
     }//GEN-LAST:event_txtPorcenKeyTyped
 
     private void txtPorcenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPorcenActionPerformed
@@ -880,8 +855,6 @@ public class DetalleVenta extends javax.swing.JInternalFrame {
         us.show();
         try {
             us.setMaximum(true);
-
-            // TODO add your handling code here:
         } catch (PropertyVetoException ex) {
             Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
         }
