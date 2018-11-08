@@ -300,11 +300,13 @@ public class Abonos extends javax.swing.JInternalFrame {
                         JOptionPane.showMessageDialog(null, "Gracias por su abono, su cambio es de" + " " + Double.toString(cambio) + "");
                         miCoordinador.insertAbono(abn);
                         miCoordinador.pagarDeuda(aux);
-                        imprimirFactura();
+                        System.out.println("case 1");
+                        imprimirbono();
                         dispose();
                     } else {
                         JOptionPane.showMessageDialog(null, "Ingrese una cantidad valida", "Credito", JOptionPane.INFORMATION_MESSAGE);
                     }
+                    break;
                 case 2:
                     if (abn.getTotal() <= monto) {
                         double cambio = monto - abn.getTotal();
@@ -312,11 +314,13 @@ public class Abonos extends javax.swing.JInternalFrame {
                         JOptionPane.showMessageDialog(null, "Gracias por su abono, su cambio es de" + " " + Double.toString(cambio) + "");
                         miCoordinador.insertAbonoApart(abn);
                         miCoordinador.updateAbon(ap);
-                        imprimirFactura();
+                        System.out.println("case 2");
+                        imprimirbono();
                         dispose();
                     } else {
                         JOptionPane.showMessageDialog(null, "Ingrese una cantidad valida", "Credito", JOptionPane.INFORMATION_MESSAGE);
                     }
+                    break;
             }
         } else {
             JOptionPane.showMessageDialog(null, "No ha ingresado un método de pago", "Credito", JOptionPane.INFORMATION_MESSAGE);
@@ -324,7 +328,7 @@ public class Abonos extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_btnAceptarActionPerformed
 
-    void imprimirFactura() {
+    void imprimirbono() {
         Date date = new Date();
         DateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -344,7 +348,7 @@ public class Abonos extends javax.swing.JInternalFrame {
         printer.printTextWrap(9, 10, 12, 32, "60950");
         printer.printTextWrap(11, 12, 4, 32, "genesys.mi@hotmail.com");
         printer.printCharAtCol(13, 1, 32, "-");
-        printer.printTextWrap(13, 14, 1, 32, "No. TICKET:" );
+        printer.printTextWrap(13, 14, 1, 32, "No. TICKET:");
         printer.printTextWrap(15, 16, 1, 32, "Fecha:" + dateFormat.format(date));
         printer.printTextWrap(16, 17, 1, 32, "Hora:" + hourFormat.format(date));
         printer.printCharAtCol(18, 1, 32, "-");
@@ -361,17 +365,17 @@ public class Abonos extends javax.swing.JInternalFrame {
         }*/
         // printer.printCharAtCol(22, 1, 32, "-");
         printer.printTextWrap(21, 22, 1, 32, "CLIENTE: ");
-        printer.printTextWrap(22, 24, 1, 32, "" );
+        printer.printTextWrap(22, 24, 1, 32, "");
         printer.printTextWrap(24, 25, 1, 32, "CAJERO ");
-        printer.printTextWrap(25, 26, 1, 32, "" );
+        printer.printTextWrap(25, 26, 1, 32, "");
         printer.printTextWrap(27, 28, 0, 32, "<<<<<<<<FORMAS DE ABONO>>>>>>>>");
-        printer.printTextWrap(29, 30, 10, 32, "EFECTIVO: " );
-        printer.printTextWrap(30, 31, 10, 32, "TARJETA: " );
-        printer.printTextWrap(31, 32, 10, 32, "CREDITO: " );
-        printer.printTextWrap(32, 33, 10, 32, "CHEQUES: " );
-        printer.printTextWrap(33, 34, 10, 32, "VALES: " );
-        printer.printTextWrap(35, 35, 10, 32, "ADEUDO: " );
-        printer.printTextWrap(36, 37, 10, 32, "ABONO: " );
+        printer.printTextWrap(29, 30, 10, 32, "EFECTIVO: ");
+        printer.printTextWrap(30, 31, 10, 32, "TARJETA: ");
+        printer.printTextWrap(31, 32, 10, 32, "CREDITO: ");
+        printer.printTextWrap(32, 33, 10, 32, "CHEQUES: ");
+        printer.printTextWrap(33, 34, 10, 32, "VALES: ");
+        printer.printTextWrap(35, 35, 10, 32, "ADEUDO: ");
+        printer.printTextWrap(36, 37, 10, 32, "ABONO: ");
         printer.printTextWrap(37, 38, 10, 32, "NUEVO ADEUDO: ");
         /* printer.printTextWrap(39 + cont, 51, 18, 32, "CAJA");
          printer.printTextWrap(41 + cont, 53, 15, 32, "Caja 1");
